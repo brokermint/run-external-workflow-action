@@ -96,20 +96,22 @@ async function run() {
   // ############## Download run logs
   const logData = (await octokit.actions.downloadWorkflowRunLogs({ run_id: workflowRunId, attempt_number: 1, repo, owner })).data;
   const directory = await unzipper.Open.buffer(Buffer.from(logData));
-  // find a file with shortest name
-  let generalLogFile = directory.files.find((f) => f.type === 'File');
+
+  // find a file in a log root folder with biggest size
+  let generalLogFile = null;
+
   for (const file of directory.files) {
-    core.info(` processing log: ${file.path}`)
-    const currentPathLength = generalLogFile ? generalLogFile.path.length : 0;
-    if (file.type === 'File' && currentPathLength > file.path.length) {
+    core.debug(` processing log file: ${file.path}`)
+    if (file.type !== 'File' || file.path.match('/')) continue;  // skip nested files and folders
+
+    if (generalLogFile === null || file.uncompressedSize > generalLogFile.uncompressedSize) {
       generalLogFile = file;
     }
   }
   if (!generalLogFile) {
     throw Error('No files were found in logs archive');
   }
-
-  core.info(`log file ${generalLogFile.path}`)
+  core.debug(`Log file: ${generalLogFile.path}`)
 
   const textBuffer = await generalLogFile.buffer();
   const text = textBuffer.toString();
