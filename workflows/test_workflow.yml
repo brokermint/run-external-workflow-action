@@ -1,0 +1,16 @@
+on: [workflow_dispatch]
+
+jobs:
+  test_run:
+    runs-on: ubuntu-latest
+    name: PR integration test
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: PR integration action
+        uses: ./
+        id: pr-integration
+
+

@@ -1,0 +1,20 @@
+{
+  "name": "run-external-workflow-action",
+  "version": "1.0.0",
+  "description": "GitHub action to run github workflows from private repositories",
+  "author": "Brokermint",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+
+  "scripts": {
+    "start": "node src/main.js"
+  },
+
+  "dependencies": {
+    "@actions/core": "^1.6.0",
+    "@octokit/action": "^4.0.8",
+    "unzipper": "^0.10.11"
+  }
+
+}

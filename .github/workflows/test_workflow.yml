@@ -1,0 +1,22 @@
+name: "Test workflow for run-external-workflow-action"
+
+on: [workflow_dispatch]
+
+jobs:
+  test_run:
+    runs-on: ubuntu-latest
+    name:  Run external workflow test
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Run external workflow
+        uses: ./
+        with:
+          repo_owner: brokermint
+          repo_name: run-external-workflow-action
+          git_ref: main
+          workflow_file_name: _shared_workflow.yml
+          client_payload: '{ "test_value": "PASS" }'
+          github_token: ${{ secrets.GITHUB_TOKEN }}

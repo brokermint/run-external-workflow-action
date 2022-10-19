@@ -1,0 +1,46 @@
+name: "Run external workflow with output"
+description: "GitHub action to run external github workflows from private repositories"
+
+branding:
+  icon: "git-pull-request"
+  color: "blue"
+
+inputs:
+  repo_owner:
+    description: "The owner of the repository where the workflow is contained."
+    required: true
+
+  repo_name:
+    description: "The repository where the workflow is contained."
+    required: true
+
+  github_token:
+    description: "The Github access token with access to the workflow repository. It is recommended you put this token under secrets."
+    required: true
+
+  workflow_file_name:
+    description: "Name of the workflow file. For example, you could use main.yml"
+    required: true
+
+  git_ref:
+    description: "The reference of the workflow run. The reference can be a branch, tag, or a commit SHA. Default: master"
+    required: false
+    default: master
+
+  check_interval:
+    description: The number of seconds delay between checking for result of run.
+    required: false
+    default: '5'
+
+  wait_timeout:
+    description: "How long do we wait the external workflow to complete (in seconds)"
+    required: false
+    default: '600'
+
+  client_payload:
+    description: Payload to pass to the workflow, must be a JSON string
+    required: false
+
+runs:
+  using: 'node16'
+  main: 'entrypoint.js'
